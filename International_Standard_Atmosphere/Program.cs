@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Diagnostics;
 
 namespace ISA
 {
@@ -11,9 +12,9 @@ namespace ISA
         float[] a_val = { -0.0065f, 0, 0.0010f, 0.0028f, 0, -0.0028f, -0.0020f, 0 };
 
         //ISA at sea level
-        float Pi = 101325;  //Pascals
-        float Di = 1.225f;   //Kg per cubic metre    
-        float Ti = 288.15f;  //Kelvin
+        float Pd = 101325;  //Pascals
+        float Dd = 1.225f;   //Kg per cubic metre    
+        float Td = 288.15f;  //Kelvin
 
         //Constants
         float g = 9.80665f;  //Acceleration due to gravity   
@@ -38,6 +39,9 @@ namespace ISA
                 Console.WriteLine("-------------------------");
                 Console.WriteLine("\n");
             }
+
+            //Speed Test
+            //Console.WriteLine(isa.SpeedTest().ToString(@"ss\.fffffff"););
         }
 
         private void sphere(float h, float Pi, float Di, float Ti)
@@ -144,16 +148,16 @@ namespace ISA
         private void ConsoleRead()
         {
             Console.WriteLine("enter height in meters");
-            var a = Console.ReadLine();
+            var stringHeight = Console.ReadLine();
             
-            if(a != null && a.Length > 0)
+            if(stringHeight != null && stringHeight.Length > 0)
             {
-                if (!a.Any(char.IsLetter) && !a.Any(char.IsWhiteSpace))
+                float h;
+                bool success = float.TryParse(stringHeight, out h);
+                if (success)
                 {
-                    float h = float.Parse(a, CultureInfo.InvariantCulture.NumberFormat);
-
                     counter = 0;
-                    sphere(h, Pi, Di, Ti);
+                    sphere(h, Pd, Dd, Td);
                     Console.WriteLine($"height =>      {h}m");
                     Console.WriteLine($"temperature => {final[2]}K");
                     Console.WriteLine($"density =>     {final[1]}kg/m3");
@@ -168,6 +172,38 @@ namespace ISA
             {
                 Console.WriteLine("can't be null");
             }
+        }
+
+        private TimeSpan SpeedTest()
+        {
+            TimeSpan total = TimeSpan.Zero;
+            int loop = 1000;
+
+            for (int j = 0; j < loop; j++)
+            {
+                var timer = new Stopwatch();
+
+                float[] h = new float[1000000];
+                var rand = new Random();
+
+                for (int i = 0; i < h.Length; i++)
+                {
+                    h[i] = (float)rand.NextDouble() * 90000;
+                }
+
+                timer.Start();
+                for (int i = 0; i < h.Length; i++)
+                {
+                    sphere(h[i], Pd, Dd, Td);
+                }
+                timer.Stop();
+
+                total = total + timer.Elapsed;
+            }
+
+            total = total / loop;
+
+            return total;
         }
     }
 
