@@ -3,9 +3,9 @@ using System.Diagnostics;
 
 namespace ISA
 {
-	public class PerformanceTest
+	public static class PerformanceTest
 	{
-        private float[] GenerateRandomSet(int sampleSize)
+        private static float[] GenerateRandomSet(int sampleSize)
         {
             float[] heights = new float[sampleSize];
             var rand = new Random();
@@ -20,12 +20,11 @@ namespace ISA
             return heights;
         }
 
-		public TimeSpan Test(Delegate method, int sampleSize)
+		public static (TimeSpan, TimeSpan) Test(int sampleSize)
 		{
             TimeSpan total = TimeSpan.Zero;
-            int loop = 1000;
 
-            for (int j = 0; j < loop; j++)
+            for (int j = 0; j < sampleSize; j++)
             {
                 var timer = new Stopwatch();
 
@@ -34,16 +33,14 @@ namespace ISA
                 timer.Start();
                 for (int i = 0; i < h.Length; i++)
                 {
-                    method.DynamicInvoke(h[i], 101325, 1.225f, 288.15f);
+                    Algorithm.isa(h[i]);
                 }
                 timer.Stop();
 
                 total = total + timer.Elapsed;
             }
 
-            total = total / loop;
-
-            return total;
+            return (total, total/sampleSize);
         }
 	}
 }
