@@ -11,7 +11,7 @@ namespace ISA
         static private void Main()
         {
             int testSize = 1000;
-            (TimeSpan totalextime, TimeSpan extime) = PerformanceTest.Test(testSize);
+            var (totalextime, extime) = PerformanceTest.Test(testSize);
             Console.WriteLine($"{testSize} result was calculated in {totalextime.TotalSeconds}s");
             Console.WriteLine($"it took {extime} per process");
 
@@ -32,7 +32,7 @@ namespace ISA
                 bool success = float.TryParse(stringHeight, out h);
                 if (success)
                 {
-                    var (Pf, Df, Tf) = Algorithm.isa(h);
+                    var (Pf, Df, Tf, _) = Algorithm.isa(h);
                     Console.WriteLine($"height =>      {h}m");
                     Console.WriteLine($"temperature => {Tf}K");
                     Console.WriteLine($"density =>     {Df}kg/m3");

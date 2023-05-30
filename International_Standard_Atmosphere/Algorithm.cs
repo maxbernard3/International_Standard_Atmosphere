@@ -14,7 +14,7 @@ namespace ISA
         //Altitudes Step
         static float[] alt = { 11000, 20000, 32000, 47000, 51000, 71000, 84000, 90000, 0 };
 
-        public static (float, float, float) isa(float h, float Pi = 101325, float Di = 1.225f, float Ti = 288.15f, int counter = 0)
+        public static (float, float, float, int) isa(float h, float Pi = 101325, float Di = 1.225f, float Ti = 288.15f, int counter = 0)
         {
             float x;
             if (h > alt[counter])
@@ -44,29 +44,29 @@ namespace ISA
             if (h > alt[alt.Length - 2])
             {
                 Console.WriteLine("Altitude out of range");
-                return (0, 0, 0);
+                return (0, 0, 0, counter);
             }
             else if (h > alt[counter])
             {
                 if (counter == 0 || counter == 3 || counter == 6)
                 {
                     counter += 1;
-                    pause(h, Pf, Df, Tf, counter);
+                    (Pf, Df, Tf, counter) = pause(h, Pf, Df, Tf, counter);
                 }
                 else
                 {
                     counter += 1;
-                    isa(h, Pf, Df, Tf, counter);
+                    (Pf, Df, Tf, counter) = isa(h, Pf, Df, Tf, counter);
                 }
-                return (Pf, Df, Tf);
+                return (Pf, Df, Tf, counter);
             }
             else
             {
-                return (Pf, Df, Tf);
+                return (Pf, Df, Tf, counter);
             }
         }
 
-        private static (float, float, float) pause(float h, float Pi, float Di, float Ti, int counter)
+        private static (float, float, float, int) pause(float h, float Pi, float Di, float Ti, int counter)
         {
             float x;
             if (h > alt[counter])
@@ -94,25 +94,25 @@ namespace ISA
             if (h > alt[alt.Length - 2])
             {
                 Console.WriteLine("Altitude out of range");
-                return (0, 0, 0);
+                return (0, 0, 0, counter);
             }
             else if (h > alt[counter])
             {
                 if (counter == 0 || counter == 3 || counter == 6)
                 {
                     counter += 1;
-                    pause(h, Pf, Df, Tf, counter);
+                    (Pf, Df, Tf, counter) = pause(h, Pf, Df, Tf, counter);
                 }
                 else
                 {
                     counter += 1;
-                    isa(h, Pf, Df, Tf, counter);
+                    (Pf, Df, Tf, counter) = isa(h, Pf, Df, Tf, counter);
                 }
-                return (Pf, Df, Tf);
+                return (Pf, Df, Tf, counter);
             }
             else
             {
-                return (Pf, Df, Tf);
+                return (Pf, Df, Tf, counter);
             }
         }
     }
