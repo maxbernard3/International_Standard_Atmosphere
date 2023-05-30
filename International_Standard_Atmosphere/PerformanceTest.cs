@@ -40,7 +40,10 @@ namespace ISA
                 total = total + timer.Elapsed;
             }
 
-            return (total, total/sampleSize);
+            Console.WriteLine($"{sampleSize} result was calculated in {total.TotalSeconds}s");
+            Console.WriteLine($"it took {total / sampleSize} per process");
+
+            return (total, total / sampleSize);
         }
 	}
 }

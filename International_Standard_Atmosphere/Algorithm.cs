@@ -14,7 +14,14 @@ namespace ISA
         //Altitudes Step
         static float[] alt = { 11000, 20000, 32000, 47000, 51000, 71000, 84000, 90000, 0 };
 
-        public static (float, float, float, int) isa(float h, float Pi = 101325, float Di = 1.225f, float Ti = 288.15f, int counter = 0)
+        // a wraper function to hide calculate's extra input and output
+        public static (float, float, float) isa(float h, float Pi = 101325, float Di = 1.225f, float Ti = 288.15f)
+        {
+            var (Pf, Df, Tf, _) = calculate(h, Pi, Di, Ti);
+            return (Pf, Df, Tf);
+        }
+
+        private static (float, float, float, int) calculate(float h, float Pi, float Di, float Ti, int counter = 0)
         {
             float x;
             if (h > alt[counter])
@@ -56,7 +63,7 @@ namespace ISA
                 else
                 {
                     counter += 1;
-                    (Pf, Df, Tf, counter) = isa(h, Pf, Df, Tf, counter);
+                    (Pf, Df, Tf, counter) = calculate(h, Pf, Df, Tf, counter);
                 }
                 return (Pf, Df, Tf, counter);
             }
@@ -106,7 +113,7 @@ namespace ISA
                 else
                 {
                     counter += 1;
-                    (Pf, Df, Tf, counter) = isa(h, Pf, Df, Tf, counter);
+                    (Pf, Df, Tf, counter) = calculate(h, Pf, Df, Tf, counter);
                 }
                 return (Pf, Df, Tf, counter);
             }

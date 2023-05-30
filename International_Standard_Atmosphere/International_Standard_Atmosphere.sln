@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32630.192
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "International_Standard_Atmosphere", "International_Standard_Atmosphere.csproj", "{B8C2EDCC-5F45-4257-B3DA-714AF08479AF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ISA", "ISA.csproj", "{B8C2EDCC-5F45-4257-B3DA-714AF08479AF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ISA_Test", "ISA_Test", "{30706634-63B1-4C2D-A90F-C4B92612F57A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
