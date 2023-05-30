@@ -21,12 +21,10 @@ namespace ISA
         float R = 287.0f;    //Molar gas constant for air
         float e = 2.71828f;  //Euler's constant
 
-        //Altitudes
+        //Altitudes Step
         float[] alt = { 11000, 20000, 32000, 47000, 51000, 71000, 84000, 90000, 0 };
 
         //variables
-        float[] final = { 0, 0, 0 };   //Pressure final, Temperature final, Density final
-
         int counter = 0;
 
         static private void Main()
@@ -44,7 +42,7 @@ namespace ISA
             //Console.WriteLine(isa.SpeedTest().ToString(@"ss\.fffffff"););
         }
 
-        private void sphere(float h, float Pi, float Di, float Ti)
+        private (float, float, float) sphere(float h, float Pi, float Di, float Ti)
         {
             float x;
             if (h > alt[counter])
@@ -58,6 +56,7 @@ namespace ISA
             float a = a_val[counter];
             float exp = -g / (R * (a));
             float Tf;
+
             if(counter == 0)
             {
                 Tf = Ti + a * (x - alt[alt.Length - 1]);
@@ -66,13 +65,14 @@ namespace ISA
             {
                 Tf = Ti + a * (x - alt[counter - 1]);
             }
-            
+
             float Pf = Pi * MathF.Pow(Tf / Ti, exp);
             float Df = Pf / (R * Tf);
 
             if (h > alt[alt.Length - 2])
             {
                 Console.WriteLine("Altitude out of range");
+                return (0, 0, 0);
             }
             else if (h > alt[counter])
             {
@@ -86,16 +86,15 @@ namespace ISA
                     counter += 1;
                     sphere(h, Pf, Df, Tf);
                 }
+                return (Pf, Df, Tf);
             }
             else
             {
-                final[0] = Pf;
-                final[1] = Df;
-                final[2] = Tf;
+                return (Pf, Df, Tf);
             }
         }
 
-        private void pause(float h, float Pi, float Di, float Ti)
+        private (float, float, float) pause(float h, float Pi, float Di, float Ti)
         {
             float x;
             if (h > alt[counter])
@@ -123,6 +122,7 @@ namespace ISA
             if (h > alt[alt.Length - 2])
             {
                 Console.WriteLine("Altitude out of range");
+                return (0, 0, 0);
             }
             else if (h > alt[counter])
             {
@@ -136,12 +136,11 @@ namespace ISA
                     counter += 1;
                     sphere(h, Pf, Df, Tf);
                 }
+                return (Pf, Df, Tf);
             }
             else
             {
-                final[0] = Pf;
-                final[1] = Df;
-                final[2] = Tf;
+                return (Pf, Df, Tf);
             }
         }
 
@@ -157,11 +156,11 @@ namespace ISA
                 if (success)
                 {
                     counter = 0;
-                    sphere(h, Pd, Dd, Td);
+                    var (Pf, Df, Tf) = sphere(h, Pd, Dd, Td);
                     Console.WriteLine($"height =>      {h}m");
-                    Console.WriteLine($"temperature => {final[2]}K");
-                    Console.WriteLine($"density =>     {final[1]}kg/m3");
-                    Console.WriteLine($"pressure =>    {final[0]}Pa");
+                    Console.WriteLine($"temperature => {Tf}K");
+                    Console.WriteLine($"density =>     {Df}kg/m3");
+                    Console.WriteLine($"pressure =>    {Pf}Pa");
                 }
                 else
                 {
@@ -173,39 +172,6 @@ namespace ISA
                 Console.WriteLine("can't be null");
             }
         }
-
-        private TimeSpan SpeedTest()
-        {
-            TimeSpan total = TimeSpan.Zero;
-            int loop = 1000;
-
-            for (int j = 0; j < loop; j++)
-            {
-                var timer = new Stopwatch();
-
-                float[] h = new float[1000000];
-                var rand = new Random();
-
-                for (int i = 0; i < h.Length; i++)
-                {
-                    h[i] = (float)rand.NextDouble() * 90000;
-                }
-
-                timer.Start();
-                for (int i = 0; i < h.Length; i++)
-                {
-                    sphere(h[i], Pd, Dd, Td);
-                }
-                timer.Stop();
-
-                total = total + timer.Elapsed;
-            }
-
-            total = total / loop;
-
-            return total;
-        }
     }
-
 }
 
